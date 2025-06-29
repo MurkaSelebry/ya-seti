@@ -1,0 +1,49 @@
+name: hw1
+
+#mgmt:
+ # network: mgmt
+ # ipv4-subnet: 192.168.100.0/24
+
+
+topology:
+  defaults:
+    kind: linux
+    image: ya-image
+    binds:
+      #- hosts:/etc/hosts
+    exec:
+      - sysctl -w net.ipv4.ip_forward=1
+     #- rm /opt/network.sh
+      - sh /opt/network.sh
+      # - service ssh start 
+ # network-mode: none
+  nodes:
+    router:
+      binds:
+        - router/network.sh:/opt/network.sh
+    pc1:
+   #   mgmt-ipv4: 192.168.100.10
+      binds:
+        - pc1/network.sh:/opt/network.sh
+    pc2:
+  #    mgmt-ipv4: 172.168.100.10
+      binds:
+        - pc2/network.sh:/opt/network.sh
+    pc3:
+ #     mgmt-ipv4: 192.168.100.20
+      binds:
+        - pc3/network.sh:/opt/network.sh
+    pc4:
+#      mgmt-ipv4: 172.168.100.20
+      binds:
+        - pc4/network.sh:/opt/network.sh
+
+  links:
+    - endpoints: ["router:eth1", "pc1:eth1"]
+    - endpoints: ["router:eth2", "pc3:eth1"]
+#    - endpoints: ["router:eth1","router:eth3"]
+    - endpoints: ["router:eth3", "pc2:eth1"]
+    - endpoints: ["router:eth4", "pc4:eth1"]
+
+
+
